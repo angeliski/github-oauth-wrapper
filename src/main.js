@@ -1,25 +1,90 @@
-import { parseToUrlParams } from './helpers'
+import {
+	stringify,
+	parse
+} from 'qs'
 
 const URL_AUTHORIZE = 'https://github.com/login/oauth/authorize'
 
 class GitHubAuthentication {
 
-	constructor(authOptions) {
-		this._authOptions = authOptions
+	constructor(clientId, redirectUri, urlApiAuthentication) {
+		this._clientId = clientId
 		this._popup = null
-		console
+		this._redirectUri = redirectUri
+		this._urlApiAuthentication = urlApiAuthentication
+		this._pollingInterval = null
 	}
 
 	execute() {
-		console.log(parseToUrlParams({ nome: 'teste', age: '18' }));
+		return this._openPopup()
+			._setFocusPopup()
+			._validateOAuthCallback()
+			.then(response => {
+				if (this._urlApiAuthentication) {
+					return 'token....'
+				}
+				return response
+			})
 	}
 
-	_createPopup() {
+	_openPopup() {
+		const url = this._createUrl()
+		const popupProperties = this._getPopupProperties()
+		this._popup = window.open(url, 'Teste', stringify(popupProperties, {
+			delimiter: ', '
+		}))
+		return this
+	}
 
+	_setFocusPopup() {
+		if (this._popup.focus) {
+			this._popup.focus()
+		}
+		return this
+	}
+
+	_getPopupProperties() {
+		const screen = window.screen
+		const width = 500
+		const height = 800
+		const popupProperties = {
+			width,
+			height,
+			top: (screen.width / 2) - (width / 2),
+			left: (screen.height / 2) - (height / 2)
+		}
+
+		return popupProperties
+	}
+
+	_validateOAuthCallback() {
+		return new Promise((resolve, reject) => {
+			this.pollingInterval = setInterval(() => {
+				//Tratar fechamento do popup
+				try {
+					const splittedUrl = this._popup.location.href.split('?')
+					const currentHost = splittedUrl[0]
+					if (currentHost === this._redirectUri) {
+						this._popup.close()
+						clearInterval(this._pollingInterval)
+						resolve(parse(splittedUrl[1]))
+					}
+				} catch (error) {
+					//Log...
+				}
+			}, 250)
+		})
 	}
 
 	_createUrl() {
+		const params = {
+			'response_type': 'code',
+			'client_id': this._clientId,
+			'redirect_uri': this._redirectUri,
+			'scope': 'user:email'
+		}
 
+		return `${URL_AUTHORIZE}?${stringify(params)}`
 	}
 
 }
@@ -37,6 +102,7 @@ class GitHubAuth2 {
 	}
 	openPopup() {
 		const url = this.createUrl()
+
 		const height = 500
 		const width = 800
 		const left = (window.screen.width / 2) - (width / 2)
