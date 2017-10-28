@@ -1,1 +1,1 @@
-module.exports = require('./dist/build.js');
+module.exports = require('./dist/build.js')

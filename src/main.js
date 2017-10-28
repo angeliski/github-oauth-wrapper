@@ -1,94 +1,98 @@
-import {
-	stringify,
-	parse
-} from 'qs'
+import { stringify, parse } from 'qs'
 
 const URL_AUTHORIZE = 'https://github.com/login/oauth/authorize'
 
 class GitHubAuthentication {
+  constructor (clientId, redirectUri, urlApiAuthentication) {
+    this._clientId = clientId
+    this._redirectUri = redirectUri
+    this._urlApiAuthentication = urlApiAuthentication
 
-	constructor(clientId, redirectUri, urlApiAuthentication) {
-		this._clientId = clientId
-		this._popup = null
-		this._redirectUri = redirectUri
-		this._urlApiAuthentication = urlApiAuthentication
-		this._pollingInterval = null
-	}
+    this._popup = null
+  }
 
-	execute() {
-		return this._openPopup()
-			._setFocusPopup()
-			._validateOAuthCallback()
-			.then(response => {
-				if (this._urlApiAuthentication) {
-					return 'token....'
-				}
-				return response
-			})
-	}
+  execute () {
+    return this
+      ._openPopup()
+      ._setFocusPopup()
+      ._validateOAuthCallback()
+      .then(response => {
+        if (this._urlApiAuthentication) {
+          return 'token....'
+        }
 
-	_openPopup() {
-		const url = this._createUrl()
-		const popupProperties = this._getPopupProperties()
-		this._popup = window.open(url, 'Teste', stringify(popupProperties, {
-			delimiter: ', '
-		}))
-		return this
-	}
+        return response
+      })
+  }
 
-	_setFocusPopup() {
-		if (this._popup.focus) {
-			this._popup.focus()
-		}
-		return this
-	}
+  _openPopup () {
+    const url = this._createUrl()
+    const popupProperties = this._getPopupProperties()
+    this._popup = window.open(url, 'Github Authentication', stringify(popupProperties, {
+      delimiter: ', '
+    }))
 
-	_getPopupProperties() {
-		const screen = window.screen
-		const width = 500
-		const height = 800
-		const popupProperties = {
-			width,
-			height,
-			top: (screen.width / 2) - (width / 2),
-			left: (screen.height / 2) - (height / 2)
-		}
+    return this
+  }
 
-		return popupProperties
-	}
+  _getPopupProperties () {
+    const screen = window.screen
+    const width = 500
+    const height = 800
+    const popupProperties = {
+      width,
+      height,
+      top: (screen.width / 2) - (width / 2),
+      left: (screen.height / 2) - (height / 2)
+    }
 
-	_validateOAuthCallback() {
-		return new Promise((resolve, reject) => {
-			this.pollingInterval = setInterval(() => {
-				//Tratar fechamento do popup
-				try {
-					const splittedUrl = this._popup.location.href.split('?')
-					const currentHost = splittedUrl[0]
-					if (currentHost === this._redirectUri) {
-						this._popup.close()
-						clearInterval(this._pollingInterval)
-						resolve(parse(splittedUrl[1]))
-					}
-				} catch (error) {
-					//Log...
-				}
-			}, 250)
-		})
-	}
+    return popupProperties
+  }
 
-	_createUrl() {
-		const params = {
-			'response_type': 'code',
-			'client_id': this._clientId,
-			'redirect_uri': this._redirectUri,
-			'scope': 'user:email'
-		}
+  _setFocusPopup () {
+    if (this._popup.focus) {
+      this._popup.focus()
+    }
 
-		return `${URL_AUTHORIZE}?${stringify(params)}`
-	}
+    return this
+  }
 
+  _validateOAuthCallback () {
+    return new Promise((resolve, reject) => {
+      const interval = setInterval(() => {
+        // TODO Tratar fechamento do popup
+        try {
+          const splittedUrl = this._popup.location.href.split('?')
+          const currentHost = splittedUrl[0]
+          const params = splittedUrl[1]
+
+          if (currentHost === this._redirectUri) {
+            this._popup.close()
+            clearInterval(interval)
+            resolve(parse(params))
+          }
+        } catch (error) {
+          // Log...
+        }
+      }, 250)
+    })
+  }
+
+  _createUrl () {
+    const params = {
+      'response_type': 'code',
+      'client_id': this._clientId,
+      'redirect_uri': this._redirectUri,
+      'scope': 'user:email'
+    }
+
+    return `${URL_AUTHORIZE}?${stringify(params)}`
+  }
 }
 
+module.exports = GitHubAuthentication
+
+/*
 class GitHubAuth2 {
 	constructor(clientId, callbackUrl) {
 		this.githubUrl = 'https://github.com/login/oauth/authorize?'
@@ -143,5 +147,4 @@ class GitHubAuth2 {
 		}).catch(console.log)
 	}
 }
-
-module.exports = GitHubAuthentication;
+*/
