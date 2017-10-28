@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --colors --progress && ./node_modules/.bin/cpx 'dist/**/*' examples",
-    "watch": "npm run build -- --watch"
+    "watch": "npm run build -- --watch",
+    "test": "echo Sempre escreva testes!"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "cpx": "^1.5.0",
+    "standard": "^10.0.3",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
   },
