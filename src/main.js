@@ -1,4 +1,4 @@
-import { stringify, parse } from 'qs'
+import { stringify as querify, parse } from 'qs'
 
 const URL_AUTHORIZE = 'https://github.com/login/oauth/authorize'
 
@@ -28,7 +28,8 @@ class GitHubAuthentication {
   _openPopup () {
     const url = this._createUrl()
     const popupProperties = this._getPopupProperties()
-    this._popup = window.open(url, 'Github Authentication', stringify(popupProperties, {
+
+    this._popup = window.open(url, 'Github Authentication', querify(popupProperties, {
       delimiter: ', '
     }))
 
@@ -86,7 +87,7 @@ class GitHubAuthentication {
       'scope': 'user:email'
     }
 
-    return `${URL_AUTHORIZE}?${stringify(params)}`
+    return `${URL_AUTHORIZE}?${querify(params)}`
   }
 }
 
