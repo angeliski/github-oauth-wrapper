@@ -3,11 +3,11 @@ import { stringify as querify, parse } from 'qs'
 const URL_AUTHORIZE = 'https://github.com/login/oauth/authorize'
 
 class GithubOAuthWrapper {
+
   constructor (clientId, redirectUri, urlApiAuthentication) {
     this._clientId = clientId
     this._redirectUri = redirectUri
     this._urlApiAuthentication = urlApiAuthentication
-
     this._popup = null
   }
 
@@ -51,9 +51,8 @@ class GithubOAuthWrapper {
   }
 
   _setFocusPopup () {
-    if (this._popup.focus) {
+    if (this._popup.focus)
       this._popup.focus()
-    }
 
     return this
   }
