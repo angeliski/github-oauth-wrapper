@@ -1,7 +1,7 @@
 {
   "name": "github-auth",
   "version": "0.0.1",
-  "description": "Simple github authentication using JS",
+  "description": "Simple wrapper github authenticator",
   "main": "index.js",
   "scripts": {
     "wp:dev": "node_modules\\.bin\\webpack --watch  --config webpack/dev.config",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/vmarcosp/github-auth-js.git"
   },
-  "author": "Marcos Vinicius <marcosvcontato.mv@gmail.com>",
+  "author": "Marcos Vinicius <contato@vmarcosp.com.br>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/vmarcosp/github-auth-js/issues"

@@ -1,6 +1,6 @@
 # Github OAuth Wrapper
 
-A wrapper created to realize the authentication with Github in single page applications.
+Simple wrapper github authenticator
 
 ## Authors
 
