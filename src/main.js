@@ -4,10 +4,9 @@ const URL_AUTHORIZE = 'https://github.com/login/oauth/authorize'
 
 class GithubOAuthWrapper {
 
-  constructor (clientId, redirectUri, urlApiAuthentication) {
+  constructor (clientId, redirectUri) {
     this._clientId = clientId
     this._redirectUri = redirectUri
-    this._urlApiAuthentication = urlApiAuthentication
     this._popup = null
   }
 
@@ -16,13 +15,6 @@ class GithubOAuthWrapper {
       ._openPopup()
       ._setFocusPopup()
       ._validateOAuthCallback()
-      .then(response => {
-        if (this._urlApiAuthentication) {
-          return 'token....'
-        }
-
-        return response
-      })
   }
 
   _openPopup () {
@@ -60,7 +52,6 @@ class GithubOAuthWrapper {
   _validateOAuthCallback () {
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {
-        // TODO Tratar fechamento do popup
         try {
           const splittedUrl = this._popup.location.href.split('?')
           const currentHost = splittedUrl[0]
@@ -72,7 +63,7 @@ class GithubOAuthWrapper {
             resolve(parse(params))
           }
         } catch (error) {
-          // Log...
+          console.log(error)
         }
       }, 250)
     })
