@@ -329,7 +329,6 @@ var GithubOAuthWrapper = function () {
     this._clientId = clientId;
     this._redirectUri = redirectUri;
     this._urlApiAuthentication = urlApiAuthentication;
-
     this._popup = null;
   }
 
@@ -376,9 +375,7 @@ var GithubOAuthWrapper = function () {
   }, {
     key: '_setFocusPopup',
     value: function _setFocusPopup() {
-      if (this._popup.focus) {
-        this._popup.focus();
-      }
+      if (this._popup.focus) this._popup.focus();
 
       return this;
     }
