@@ -3,7 +3,7 @@
 Hi everyone! It's a simple wrapper to authenticate your app with github accounts. It'll open a new window asking to user his credentials and after authentication, you'll recive the token from the github.
 
 ## How to use
-It's very very simple =P Just get your github *client ID* to user give authorization to your app and wich is the callback url to recive the token. Look that:
+It's very very simple =P Just get your github *client ID* and use it configure and authorize your app. Then, define the callback url which will receive the token. Look at that:
 
 ```javascript
 window.addEventListener('DOMContentLoaded', () => {
