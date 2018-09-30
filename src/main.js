@@ -1,4 +1,6 @@
 import { stringify as querify, parse } from 'qs'
+import compareUrls from 'compare-urls';
+
 
 const URL_AUTHORIZE = 'https://github.com/login/oauth/authorize'
 
@@ -57,7 +59,7 @@ class GithubOAuthWrapper {
           const currentHost = splittedUrl[0]
           const params = splittedUrl[1]
 
-          if (currentHost === this._redirectUri) {
+          if (compareUrls(currentHost,this._redirectUri)) {
             this._popup.close()
             clearInterval(interval)
             resolve(parse(params))

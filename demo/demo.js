@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
+  const clientId = '7ce460021a69ec7f56b7'
   const $btn = document.querySelector('#btn-auth')
-  const clientId = '29186b8e25b21408ef61'
-  const urlCallback = 'http://localhost:3005/auth/callback'
+  const urlCallback = 'http://localhost:8000'
 
   $btn.addEventListener('click', () => {
     const oAuthWrapper = new window.GithubOAuthWrapper(clientId, urlCallback)

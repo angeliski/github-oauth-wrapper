@@ -4,9 +4,9 @@
   "description": "Simple wrapper github authenticator",
   "main": "index.js",
   "scripts": {
-    "wp:dev": "node_modules\\.bin\\webpack --watch  --config webpack/dev.config",
-    "build": "node_modules\\.bin\\webpack --config  webpack/prod.config",
-    "dev":"parallelshell \"yarn wp:dev\" \"lite-server\""
+    "wp:dev": "webpack --watch  --config webpack/dev.config",
+    "build": "webpack --config  webpack/prod.config",
+    "dev": "parallelshell \"yarn wp:dev\" \"lite-server\""
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.17.0",
+    "compare-urls": "^2.0.0",
     "qs": "^6.5.1"
   }
 }
